@@ -29,6 +29,7 @@ int main() {
     String c2 = 'a';
     assert(c1 == c2);
 
+    // assert(false);
 
     std::cout << "All asserts passed" << std::endl;
 

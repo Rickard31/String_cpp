@@ -2,25 +2,21 @@
 #include <cstring>
 #include <cassert>
 
-String::String(const char *charArr) : _string(new char[strlen(charArr) + 1]), _length(strlen(charArr)) {
-    strcpy_s(_string, _length + 1, charArr);
+String::String(const char *charArr) : _string{new char[strlen(charArr) + 1]}, _length{strlen(charArr)} {
+    strcpy(_string, charArr);
     assert(_length == strlen(_string));
 }
 
-String::String(const char ch) : _string(new char[2]), _length(1) {
+String::String(const char ch) : _string{new char[2]}, _length{1} {
     _string[0] = ch;
     _string[1] = '\0';
     assert(_length == strlen(_string));
 }
 
-String::String(const std::string &str)
-        : // String(str.c_str()) {} //Such initialization is not supported by MSVC, even though it works on gcc and minGW
-        _string(new char[str.length() + 1]), _length(str.length()) {
-    strcpy_s(_string, _length + 1, str.c_str());
-}
+String::String(const std::string &str) : String{str.c_str()} {}
 
-String::String(const String &other) : _string(new char[other.length() + 1]), _length(other.length()) {
-    strcpy_s(_string, other.length() + 1, other.c_string());
+String::String(const String &other) : _string{new char[other.length() + 1]}, _length{other.length()} {
+    strcpy(_string, other.c_string());
 }
 
 String::~String() {
@@ -40,8 +36,8 @@ String &String::operator=(const std::string &str) {
 String &String::operator=(const char *charArr) {
     if (_string == charArr)
         return *this;
-    size_t newCharLen = strlen(charArr);
-    char *temp = new char[newCharLen + 1];
+    size_t newCharLen{strlen(charArr)};
+    char *temp{new char[newCharLen + 1]};
     strcpy(temp, charArr);
     assert(temp[newCharLen] == '\0');
     assert(strlen(charArr) == strlen(temp));
@@ -51,7 +47,7 @@ String &String::operator=(const char *charArr) {
     return *this;
 }
 
-String& String::operator=(const char ch) {
+String &String::operator=(const char ch) {
     delete[] _string;
     _string = new char[2];
     _string[0] = ch;
@@ -69,9 +65,9 @@ String &String::operator+=(const std::string &str) {
 }
 
 String &String::operator+=(const char *charArr) {
-    size_t newLen = length() + strlen(charArr);
-    char *temp = new char[newLen + 1];
-    strcpy_s(temp, _length + 1, _string);
+    size_t newLen{length() + strlen(charArr)};
+    char *temp {new char[newLen + 1]};
+    strcpy(temp, _string);
     strcat(temp, charArr);
     delete[] _string;
     _string = temp;
